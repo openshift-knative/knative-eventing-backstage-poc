@@ -100,3 +100,45 @@ catalog:
     #   target: https://github.com/backstage/backstage/blob/master/packages/catalog-model/examples/acme-corp.yaml
     #   rules:
     #     - allow: [User, Group]
+
+kubernetes:
+  serviceLocatorMethod:
+    type: 'multiTenant'
+  clusterLocatorMethods:
+    - type: 'config'
+      clusters:
+        - url: https://192.168.2.151:16443  # kubectl cluster-info
+          name: lenovo
+          authProvider: 'serviceAccount'
+          skipTLSVerify: true
+          skipMetricsLookup: true
+          # NOTE: token work
+          # 1. create a new service account in the kube-system namespace
+          # kubectl -n kube-system create serviceaccount backstage-admin
+          # 2. create a clusterrolebinding
+          # kubectl create clusterrolebinding backstage-admin --clusterrole=cluster-admin --serviceaccount=kube-system:backstage-admin
+          # 3. create a secret for the service account
+          # kubectl apply -f - <<EOF
+          #apiVersion: v1
+          #kind: Secret
+          #metadata:
+          #  name: backstage-admin
+          #  namespace: kube-system
+          #  annotations:
+          #    kubernetes.io/service-account.name: backstage-admin
+          #type: kubernetes.io/service-account-token
+          #EOF
+          # 4. get the token
+          # export TOKEN=$(kubectl -n kube-system get secret backstage-admin -o jsonpath='{.data.token}' | base64 --decode)
+          # 5. run a sanity check
+          # curl -k -H "Authorization: Bearer $TOKEN" -X GET "https://192.168.2.151:16443/api/v1/nodes" | json_pp
+
+          serviceAccountToken: "eyJhbGciOiJSUzI1NiIsImtpZCI6Ijd4dnI3bW02SC0wZFRHRklGSUJ3NnNmNHRkN3Y2b1BvYjRQX3NDSWZPeHcifQ.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJrdWJlLXN5c3RlbSIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VjcmV0Lm5hbWUiOiJiYWNrc3RhZ2UtYWRtaW4iLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlcnZpY2UtYWNjb3VudC5uYW1lIjoiYmFja3N0YWdlLWFkbWluIiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZXJ2aWNlLWFjY291bnQudWlkIjoiMzBjYTEyMmEtMDg3MS00OGNhLThhNWQtNDQyODY5MjEwZDkyIiwic3ViIjoic3lzdGVtOnNlcnZpY2VhY2NvdW50Omt1YmUtc3lzdGVtOmJhY2tzdGFnZS1hZG1pbiJ9.BpopSV91NX4ggDZU6r03-roqifP3ZLBUVIM-O7eJyI_hnqQwnbf6N5tTlHeDXTIkc6N9UqZrfc3e1z12zyK-5IGdcyfkY0lk3bKWIF9fm2X6092D6XCLIWE7f2TnuygPhLaqiTwv9RA_y6ZLDiVOUQWyPSlbRXyx7y4RqkuUy5YeGXcrDjD1CtM4PYOk-Xa6RbC_62tWy9VkDux65VleHBmaEYojANpM8IYT2aa42rT3xDMNEES6l6QXOzAacaY1xtINl8RpBxt-lHZKC_BXNNLxRvSJuMNwir9AapMVz_fRo2jIPaHDloYvv51ZC3zd9-5DwikXm7z9cWnjt-VgiQ"
+          dashboardUrl: http://127.0.0.1:64713 # url copied from running the command: minikube service kubernetes-dashboard -n kubernetes-dashboard
+          dashboardApp: standard
+          # caData: '' # we're skipping TLS verification, so no need for a CA
+          # caFile: '' # local path to CA file
+#          customResources:
+#            - group: 'argoproj.io'
+#              apiVersion: 'v1alpha1'
+#              plural: 'rollouts'
