@@ -138,7 +138,10 @@ kubernetes:
           dashboardApp: standard
           # caData: '' # we're skipping TLS verification, so no need for a CA
           # caFile: '' # local path to CA file
-#          customResources:
-#            - group: 'argoproj.io'
-#              apiVersion: 'v1alpha1'
-#              plural: 'rollouts'
+          customResources:
+            - group: 'tekton.dev'
+              apiVersion: 'v1beta1'
+              plural: 'pipelineruns'
+            - group: 'tekton.dev'
+              apiVersion: 'v1beta1'
+              plural: 'taskruns'

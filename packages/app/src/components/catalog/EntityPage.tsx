@@ -60,6 +60,10 @@ import { ReportIssue } from '@backstage/plugin-techdocs-module-addons-contrib';
 
 import { EntityKubernetesContent } from '@backstage/plugin-kubernetes';
 
+import { TektonPage } from '@janus-idp/backstage-plugin-tekton';
+import { LatestPipelineRun, isTektonCIAvailable } from '@janus-idp/backstage-plugin-tekton';
+
+
 const techdocsContent = (
   <EntityTechdocsContent>
     <TechDocsAddons>
@@ -91,6 +95,9 @@ const cicdContent = (
           </Button>
         }
       />
+    </EntitySwitch.Case>
+    <EntitySwitch.Case if={isTektonCIAvailable}>
+      <LatestPipelineRun linkTekton />
     </EntitySwitch.Case>
   </EntitySwitch>
 );
@@ -180,6 +187,10 @@ const serviceEntityPage = (
 
     <EntityLayout.Route path="/kubernetes" title="Kubernetes">
       <EntityKubernetesContent refreshIntervalMs={30000} />
+    </EntityLayout.Route>
+
+    <EntityLayout.Route path="/tekton" title="Tekton">
+      <TektonPage />
     </EntityLayout.Route>
   </EntityLayout>
 );
