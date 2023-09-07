@@ -239,3 +239,10 @@ and
 When you go to http://localhost:3000/aliok-test-01 you will see the plugin from the Backstage tutorial.
 
 ![](README_img04.png)
+
+# 3scale plugin
+
+Install the plugin:
+```shell
+yarn workspace backend add @janus-idp/backstage-plugin-3scale-backend
+```
