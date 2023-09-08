@@ -246,3 +246,43 @@ Install the plugin:
 ```shell
 yarn workspace backend add @janus-idp/backstage-plugin-3scale-backend
 ```
+
+Enable the plugin by making sure you have these in `app-config.yaml`:
+```yaml
+catalog:
+  providers:
+    threeScaleApiEntity:
+      dev:
+        baseUrl: https://<TENANT>-admin.3scale.net
+        accessToken: <ACCESS_TOKEN>
+        schedule: # optional; same options as in TaskScheduleDefinition
+          # supports cron, ISO duration, "human duration" as used in code
+          frequency: { minutes: 1 }
+          # supports ISO duration, "human duration" as used in code
+          timeout: { minutes: 1 }
+```
+
+and having the entity provider in `packages/backend/src/plugins/catalog.ts`:
+```typescript
+import { ThreeScaleApiEntityProvider } from '@janus-idp/backstage-plugin-3scale-backend';
+
+...
+
+builder.addEntityProvider(
+    ThreeScaleApiEntityProvider.fromConfig(env.config, {
+      logger: env.logger,
+      scheduler: env.scheduler,
+    }),
+  );
+```
+
+Screenshots:
+
+![](README_img05.png)
+---
+![](README_img06.png)
+---
+![](README_img07.png)
+---
+![](README_img08.png)
+
