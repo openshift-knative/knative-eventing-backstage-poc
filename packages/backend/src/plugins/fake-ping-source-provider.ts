@@ -85,20 +85,23 @@ export class FakePingSourceProvider implements EntityProvider {
                     {
                         title: "View in OpenShift Console",
                         icon: "dashboard",
-                        url: `https://console-openshift-console.apps.aliok-c117.serverless.devcluster.openshift.com/k8s/ns/${pingSource.metadata.namespace}/sources.knative.dev~v1beta1~EventType/${pingSource.metadata.name}`
+                        url: `https://console-openshift-console.apps.aliok-c117.serverless.devcluster.openshift.com/k8s/ns/${pingSource.metadata.namespace}/sources.knative.dev~v1~PingSource/${pingSource.metadata.name}`
                     }
                 ],
             },
             spec: {
                 type: 'eventSource',
                 lifecycle: this.env,
-                system: 'aliok-test',
-                owner: 'aliok-test',
+                system: 'knative-event-mesh',
+                owner: 'knative',
+                providesApis: [
+                    `api:${pingSource.status.ceAttributes[0].type}`
+                ]
             },
             // relations: [
             //     {
             //         type: "providesApis",
-            //         targetRef: `aliok-test:api:${pingSource.spec.reference.namespace}/${pingSource.spec.reference.name}`,
+            //         targetRef: `aliok-test:api:${pingSource.status.ceAttributes[0].type}`,
             //     }
             // ],
             // relations: [

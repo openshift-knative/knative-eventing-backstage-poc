@@ -1,4 +1,3 @@
-import {UrlReader} from '@backstage/backend-common';
 import {EventTypes} from './fake-data';
 
 import {
@@ -45,11 +44,17 @@ export class FakeEventTypeProvider implements EntityProvider {
 
         const entities:Entity[] = [];
 
+        // de-duplicate based on eventType.spec.type
+        const eventTypeMap = new Map<string, any>();
+        for (const eventType of EventTypes.items) {
+            eventTypeMap.set(eventType.spec.type, eventType);
+        }
+
         /** [5] */
-            for (const eventType of EventTypes.items) {
-                const entity = this.buildEventTypeEntity(eventType);
-                entities.push(entity);
-            }
+        for (let [_, eventType] of eventTypeMap) {
+            const entity = this.buildEventTypeEntity(eventType);
+            entities.push(entity);
+        }
 
         /** [6] */
         await this.connection.applyMutation({
@@ -77,10 +82,10 @@ export class FakeEventTypeProvider implements EntityProvider {
                     // "backstage.io/edit-url": "https://console-openshift-console.apps.aliok-c117.serverless.devcluster.openshift.com/k8s/ns/${eventType.metadata.namespace}/eventing.knative.dev~v1beta1~EventType/${eventType.metadata.name}",
                     ...eventType.metadata.annotations
                 },
-                name: eventType.metadata.name,
-                namespace: eventType.metadata.namespace,
+                name: eventType.spec.type,
+                // namespace: eventType.metadata.namespace,
                 description: eventType.spec.description,
-                title: eventType.spec.type,
+                // title: eventType.spec.type,
                 labels: eventType.metadata.labels || {},
                 links: [
                     {
@@ -93,8 +98,8 @@ export class FakeEventTypeProvider implements EntityProvider {
             spec: {
                 type: 'eventType',
                 lifecycle: this.env,
-                system: 'aliok-test',
-                owner: 'aliok-test',
+                system: 'knative-event-mesh',
+                owner: 'knative',
                 definition: eventType.spec.schemaData || "{}",
             },
             // relations: [
