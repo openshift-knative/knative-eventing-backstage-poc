@@ -15,25 +15,21 @@ import {
 
 import {Logger} from 'winston';
 
-/**
- * Provides entities from fictional frobs service.
- */
-export class FrobsProvider implements EntityProvider {
+export class FakeEventTypeProvider implements EntityProvider {
     private readonly env:string;
-    private readonly reader:UrlReader;
+    // @ts-ignore
     private readonly logger:Logger;
     private connection?:EntityProviderConnection;
 
     /** [1] */
-    constructor(env:string, reader:UrlReader, logger:Logger) {
+    constructor(env:string, logger:Logger) {
         this.env = env;
-        this.reader = reader;
         this.logger = logger;
     }
 
     /** [2] */
     getProviderName():string {
-        return `frobs-${this.env}`;
+        return `fake-event-type-${this.env}`;
     }
 
     /** [3] */
@@ -46,13 +42,6 @@ export class FrobsProvider implements EntityProvider {
         if (!this.connection) {
             throw new Error('Not initialized');
         }
-
-        // const response = await this.reader.readUrl(
-        //     `https://frobs-${this.env}.example.com/data`,
-        // );
-        // const data = JSON.parse(await response.buffer()).toString();
-
-        this.logger.info("Hello world!");
 
         const entities:Entity[] = [];
 
@@ -67,12 +56,12 @@ export class FrobsProvider implements EntityProvider {
             type: 'full',
             entities: entities.map(entity => ({
                 entity,
-                locationKey: `frobs-provider:${this.env}`,
+                locationKey: `fake-event-type-provider:${this.env}`,
             })),
         });
     }
 
-    private buildEventTypeEntity(eventType):ApiEntity {
+    private buildEventTypeEntity(eventType:any):ApiEntity {
         // const location = `url:${this.baseUrl}/apiconfig/services/${service.service.id}`;
 
         // const spec = JSON.parse(apiDoc.api_doc.body);

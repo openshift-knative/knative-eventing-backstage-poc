@@ -2,7 +2,7 @@ import { CatalogBuilder } from '@backstage/plugin-catalog-backend';
 import { ScaffolderEntitiesProcessor } from '@backstage/plugin-scaffolder-backend';
 import { Router } from 'express';
 import { PluginEnvironment } from '../types';
-import { FrobsProvider } from './fake-event-type-provider';
+import { FakeEventTypeProvider } from './fake-event-type-provider';
 import { ThreeScaleApiEntityProvider } from '@janus-idp/backstage-plugin-3scale-backend';
 
 
@@ -11,8 +11,8 @@ export default async function createPlugin(
 ): Promise<Router> {
   const builder = await CatalogBuilder.create(env);
 
-  const frobs = new FrobsProvider('production', env.reader, env.logger);
-  builder.addEntityProvider(frobs);
+  const fakeEventTypeProvider = new FakeEventTypeProvider('production', env.logger);
+  builder.addEntityProvider(fakeEventTypeProvider);
 
   const three = ThreeScaleApiEntityProvider.fromConfig(env.config, {
           logger: env.logger,
@@ -28,9 +28,9 @@ export default async function createPlugin(
   await processingEngine.start();
 
   await env.scheduler.scheduleTask({
-      id: 'run_frobs_refresh',
+      id: 'run_fake_event_type_refresh',
       fn: async () => {
-          await frobs.run();
+          await fakeEventTypeProvider.run();
       },
       frequency: { minutes: 30 },
       timeout: { minutes: 10 },
