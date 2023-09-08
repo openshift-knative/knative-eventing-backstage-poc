@@ -1,4 +1,4 @@
-import {PingSources} from './fake-data';
+import {ApiServerSources} from './fake-data';
 
 import {
     ANNOTATION_LOCATION,
@@ -14,7 +14,7 @@ import {
 
 import {Logger} from 'winston';
 
-export class FakePingSourceProvider implements EntityProvider {
+export class FakeApiServerSourceProvider implements EntityProvider {
     private readonly env:string;
     // @ts-ignore
     private readonly logger:Logger;
@@ -28,7 +28,7 @@ export class FakePingSourceProvider implements EntityProvider {
 
     /** [2] */
     getProviderName():string {
-        return `fake-ping-source-${this.env}`;
+        return `fake-api-server-source-${this.env}`;
     }
 
     /** [3] */
@@ -45,8 +45,8 @@ export class FakePingSourceProvider implements EntityProvider {
         const entities:Entity[] = [];
 
         /** [5] */
-        for (const pingSource of PingSources.items) {
-            const entity = this.buildPingSourceEntity(pingSource);
+        for (const apiServerSource of ApiServerSources.items) {
+            const entity = this.buildApiServerSourceEntity(apiServerSource);
             entities.push(entity);
         }
 
@@ -55,17 +55,17 @@ export class FakePingSourceProvider implements EntityProvider {
             type: 'full',
             entities: entities.map(entity => ({
                 entity,
-                locationKey: `fake-ping-source-provider:${this.env}`,
+                locationKey: `fake-api-server-source-provider:${this.env}`,
             })),
         });
     }
 
-    private buildPingSourceEntity(pingSource:any):ComponentEntity {
+    private buildApiServerSourceEntity(apiServerSource:any):ComponentEntity {
         // const location = `url:${this.baseUrl}/apiconfig/services/${service.service.id}`;
 
         // const spec = JSON.parse(apiDoc.api_doc.body);
 
-        const providesApis = pingSource.status.ceAttributes.map((ceAttribute:any) => {
+        const providesApis = apiServerSource.status.ceAttributes.map((ceAttribute:any) => {
             return `api:${ceAttribute.type}`;
         });
 
@@ -78,18 +78,18 @@ export class FakePingSourceProvider implements EntityProvider {
                     [ANNOTATION_ORIGIN_LOCATION]: "url:tbd-kube-api-server",
                     // "backstage.io/view-url": "https://console-openshift-console.apps.aliok-c117.serverless.devcluster.openshift.com/k8s/ns/${eventType.metadata.namespace}/eventing.knative.dev~v1beta1~EventType/${eventType.metadata.name}",
                     // "backstage.io/edit-url": "https://console-openshift-console.apps.aliok-c117.serverless.devcluster.openshift.com/k8s/ns/${eventType.metadata.namespace}/eventing.knative.dev~v1beta1~EventType/${eventType.metadata.name}",
-                    ...pingSource.metadata.annotations
+                    ...apiServerSource.metadata.annotations
                 },
-                name: pingSource.metadata.name,
-                namespace: pingSource.metadata.namespace,
-                // description: pingSource.spec.description,
+                name: apiServerSource.metadata.name,
+                namespace: apiServerSource.metadata.namespace,
+                // description: apiServerSource.spec.description,
                 // title: eventType.spec.type,
-                labels: pingSource.metadata.labels || {},
+                labels: apiServerSource.metadata.labels || {},
                 links: [
                     {
                         title: "View in OpenShift Console",
                         icon: "dashboard",
-                        url: `https://console-openshift-console.apps.aliok-c117.serverless.devcluster.openshift.com/k8s/ns/${pingSource.metadata.namespace}/sources.knative.dev~v1~PingSource/${pingSource.metadata.name}`
+                        url: `https://console-openshift-console.apps.aliok-c117.serverless.devcluster.openshift.com/k8s/ns/${apiServerSource.metadata.namespace}/sources.knative.dev~v1~ApiServerSource/${apiServerSource.metadata.name}`
                     }
                 ],
             },
@@ -103,7 +103,7 @@ export class FakePingSourceProvider implements EntityProvider {
             // relations: [
             //     {
             //         type: "providesApis",
-            //         targetRef: `aliok-test:api:${pingSource.status.ceAttributes[0].type}`,
+            //         targetRef: `aliok-test:api:${apiServerSource.status.ceAttributes[0].type}`,
             //     }
             // ],
             // relations: [
