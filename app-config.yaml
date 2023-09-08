@@ -91,6 +91,17 @@ catalog:
       rules:
         - allow: [User, Group]
 
+  providers:
+    threeScaleApiEntity:
+      dev:
+        baseUrl: https://<foo>-test-admin.3scale.net
+        accessToken: <xxx>
+        schedule: # optional; same options as in TaskScheduleDefinition
+          # supports cron, ISO duration, "human duration" as used in code
+          frequency: { minutes: 1 }
+          # supports ISO duration, "human duration" as used in code
+          timeout: { minutes: 1 }
+
     ## Uncomment these lines to add more example data
     # - type: url
     #   target: https://github.com/backstage/backstage/blob/master/packages/catalog-model/examples/all.yaml
