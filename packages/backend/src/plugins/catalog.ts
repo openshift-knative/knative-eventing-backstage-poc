@@ -5,6 +5,7 @@ import { PluginEnvironment } from '../types';
 import { FakeEventTypeProvider } from './fake-event-type-provider';
 import { FakePingSourceProvider } from './fake-ping-source-provider';
 import { FakeApiServerSourceProvider } from './fake-api-server-source-provider';
+// import { FakeBrokerProvider } from './fake-broker-provider';
 import { ThreeScaleApiEntityProvider } from '@janus-idp/backstage-plugin-3scale-backend';
 
 
@@ -19,8 +20,11 @@ export default async function createPlugin(
   const fakePingSourceProvider = new FakePingSourceProvider('production', env.logger);
   builder.addEntityProvider(fakePingSourceProvider);
 
-    const fakeApiServerSource = new FakeApiServerSourceProvider('production', env.logger);
-    builder.addEntityProvider(fakeApiServerSource);
+    const fakeApiServerSourceProvider = new FakeApiServerSourceProvider('production', env.logger);
+    builder.addEntityProvider(fakeApiServerSourceProvider);
+
+    // const fakeBrokerProvider = new FakeBrokerProvider('production', env.logger);
+    // builder.addEntityProvider(fakeBrokerProvider);
 
 
   builder.addEntityProvider(ThreeScaleApiEntityProvider.fromConfig(env.config, {
@@ -53,11 +57,20 @@ export default async function createPlugin(
     await env.scheduler.scheduleTask({
         id: 'run_api_server_source_refresh',
         fn: async () => {
-            await fakeApiServerSource.run();
+            await fakeApiServerSourceProvider.run();
         },
         frequency: { minutes: 30 },
         timeout: { minutes: 10 },
     });
+
+    // await env.scheduler.scheduleTask({
+    //     id: 'run_broker_refresh',
+    //     fn: async () => {
+    //         await fakeBrokerProvider.run();
+    //     },
+    //     frequency: { minutes: 30 },
+    //     timeout: { minutes: 10 },
+    // });
 
   return router;
 }

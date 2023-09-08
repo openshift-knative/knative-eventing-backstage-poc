@@ -398,3 +398,222 @@ export const ApiServerSources = {
         "resourceVersion": ""
     }
 };
+
+export const Brokers = {
+    "apiVersion": "v1",
+    "items": [
+        {
+            "apiVersion": "eventing.knative.dev/v1",
+            "kind": "Broker",
+            "metadata": {
+                "annotations": {
+                    "eventing.knative.dev/broker.class": "MTChannelBasedBroker",
+                    "eventing.knative.dev/creator": "kubernetes-admin",
+                    "eventing.knative.dev/lastModifier": "kubernetes-admin",
+                    "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"eventing.knative.dev/v1\",\"kind\":\"Broker\",\"metadata\":{\"annotations\":{},\"name\":\"default\",\"namespace\":\"default\"}}\n"
+                },
+                "creationTimestamp": "2023-09-08T08:29:32Z",
+                "generation": 1,
+                "name": "default",
+                "namespace": "default",
+                "resourceVersion": "1459",
+                "uid": "897ba35d-bf5a-4c0d-bb19-371d1515605a"
+            },
+            "spec": {
+                "config": {
+                    "apiVersion": "v1",
+                    "kind": "ConfigMap",
+                    "name": "config-br-default-channel",
+                    "namespace": "knative-eventing"
+                },
+                "delivery": {
+                    "backoffDelay": "PT0.2S",
+                    "backoffPolicy": "exponential",
+                    "retry": 10
+                }
+            },
+            "status": {
+                "address": {
+                    "name": "http",
+                    "url": "http://broker-ingress.knative-eventing.svc.cluster.local/default/default"
+                },
+                "annotations": {
+                    "knative.dev/channelAPIVersion": "messaging.knative.dev/v1",
+                    "knative.dev/channelAddress": "http://default-kne-trigger-kn-channel.default.svc.cluster.local",
+                    "knative.dev/channelKind": "InMemoryChannel",
+                    "knative.dev/channelName": "default-kne-trigger"
+                },
+                "conditions": [
+                    {
+                        "lastTransitionTime": "2023-09-08T08:29:32Z",
+                        "status": "True",
+                        "type": "Addressable"
+                    },
+                    {
+                        "lastTransitionTime": "2023-09-08T08:29:32Z",
+                        "message": "No dead letter sink is configured.",
+                        "reason": "DeadLetterSinkNotConfigured",
+                        "severity": "Info",
+                        "status": "True",
+                        "type": "DeadLetterSinkResolved"
+                    },
+                    {
+                        "lastTransitionTime": "2023-09-08T08:29:32Z",
+                        "status": "True",
+                        "type": "FilterReady"
+                    },
+                    {
+                        "lastTransitionTime": "2023-09-08T08:29:32Z",
+                        "status": "True",
+                        "type": "IngressReady"
+                    },
+                    {
+                        "lastTransitionTime": "2023-09-08T08:29:32Z",
+                        "status": "True",
+                        "type": "Ready"
+                    },
+                    {
+                        "lastTransitionTime": "2023-09-08T08:29:32Z",
+                        "status": "True",
+                        "type": "TriggerChannelReady"
+                    }
+                ],
+                "observedGeneration": 1
+            }
+        }
+    ],
+    "kind": "List",
+    "metadata": {
+        "resourceVersion": ""
+    }
+};
+
+export const Triggers = {
+    "apiVersion": "v1",
+    "items": [
+        {
+            "apiVersion": "eventing.knative.dev/v1",
+            "kind": "Trigger",
+            "metadata": {
+                "annotations": {
+                    "eventing.knative.dev/creator": "kubernetes-admin",
+                    "eventing.knative.dev/lastModifier": "kubernetes-admin",
+                    "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"eventing.knative.dev/v1\",\"kind\":\"Trigger\",\"metadata\":{\"annotations\":{},\"name\":\"trigger\",\"namespace\":\"default\"},\"spec\":{\"broker\":\"default\",\"subscriber\":{\"ref\":{\"apiVersion\":\"v1\",\"kind\":\"Service\",\"name\":\"standalone-request-logger\"}}}}\n"
+                },
+                "creationTimestamp": "2023-09-08T09:19:33Z",
+                "generation": 1,
+                "labels": {
+                    "eventing.knative.dev/broker": "default"
+                },
+                "name": "trigger",
+                "namespace": "default",
+                "resourceVersion": "144435",
+                "uid": "0682eb56-e73a-48b6-a552-92af639801fd"
+            },
+            "spec": {
+                "broker": "default",
+                "filter": {},
+                "subscriber": {
+                    "ref": {
+                        "apiVersion": "v1",
+                        "kind": "Service",
+                        "name": "standalone-request-logger",
+                        "namespace": "default"
+                    }
+                }
+            },
+            "status": {
+                "conditions": [
+                    {
+                        "lastTransitionTime": "2023-09-08T09:19:33Z",
+                        "status": "True",
+                        "type": "BrokerReady"
+                    },
+                    {
+                        "lastTransitionTime": "2023-09-08T09:19:33Z",
+                        "message": "No dead letter sink is configured.",
+                        "reason": "DeadLetterSinkNotConfigured",
+                        "status": "True",
+                        "type": "DeadLetterSinkResolved"
+                    },
+                    {
+                        "lastTransitionTime": "2023-09-08T09:19:33Z",
+                        "status": "True",
+                        "type": "DependencyReady"
+                    },
+                    {
+                        "lastTransitionTime": "2023-09-08T09:19:34Z",
+                        "status": "True",
+                        "type": "Ready"
+                    },
+                    {
+                        "lastTransitionTime": "2023-09-08T09:19:33Z",
+                        "status": "True",
+                        "type": "SubscriberResolved"
+                    },
+                    {
+                        "lastTransitionTime": "2023-09-08T09:19:34Z",
+                        "status": "True",
+                        "type": "SubscriptionReady"
+                    }
+                ],
+                "observedGeneration": 1,
+                "subscriberUri": "http://standalone-request-logger.default.svc.cluster.local"
+            }
+        }
+    ],
+    "kind": "List",
+    "metadata": {
+        "resourceVersion": ""
+    }
+};
+
+export const Services = {
+    "apiVersion": "v1",
+    "items": [
+        {
+            "apiVersion": "v1",
+            "kind": "Service",
+            "metadata": {
+                "annotations": {
+                    "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"v1\",\"kind\":\"Service\",\"metadata\":{\"annotations\":{},\"creationTimestamp\":null,\"name\":\"standalone-request-logger\",\"namespace\":\"default\"},\"spec\":{\"ports\":[{\"port\":80,\"protocol\":\"TCP\",\"targetPort\":8080}],\"selector\":{\"run\":\"standalone-request-logger\"}}}\n"
+                },
+                "creationTimestamp": "2023-09-08T09:19:33Z",
+                "name": "standalone-request-logger",
+                "namespace": "default",
+                "resourceVersion": "144379",
+                "uid": "6c70e14f-8042-4774-8c1c-a8897d5e15d4"
+            },
+            "spec": {
+                "clusterIP": "10.96.129.196",
+                "clusterIPs": [
+                    "10.96.129.196"
+                ],
+                "internalTrafficPolicy": "Cluster",
+                "ipFamilies": [
+                    "IPv4"
+                ],
+                "ipFamilyPolicy": "SingleStack",
+                "ports": [
+                    {
+                        "port": 80,
+                        "protocol": "TCP",
+                        "targetPort": 8080
+                    }
+                ],
+                "selector": {
+                    "run": "standalone-request-logger"
+                },
+                "sessionAffinity": "None",
+                "type": "ClusterIP"
+            },
+            "status": {
+                "loadBalancer": {}
+            }
+        },
+    ],
+    "kind": "List",
+    "metadata": {
+        "resourceVersion": ""
+    }
+};
