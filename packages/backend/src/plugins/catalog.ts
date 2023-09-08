@@ -3,6 +3,7 @@ import { ScaffolderEntitiesProcessor } from '@backstage/plugin-scaffolder-backen
 import { Router } from 'express';
 import { PluginEnvironment } from '../types';
 import { FakeEventTypeProvider } from './fake-event-type-provider';
+import { FakePingSourceProvider } from './fake-ping-source-provider';
 import { ThreeScaleApiEntityProvider } from '@janus-idp/backstage-plugin-3scale-backend';
 
 
@@ -14,14 +15,14 @@ export default async function createPlugin(
   const fakeEventTypeProvider = new FakeEventTypeProvider('production', env.logger);
   builder.addEntityProvider(fakeEventTypeProvider);
 
-  const three = ThreeScaleApiEntityProvider.fromConfig(env.config, {
-          logger: env.logger,
-          scheduler: env.scheduler,
-      });
+  const fakePingSourceProvider = new FakePingSourceProvider('production', env.logger);
+  builder.addEntityProvider(fakePingSourceProvider);
 
-  builder.addEntityProvider(
-      three
-  );
+
+  builder.addEntityProvider(ThreeScaleApiEntityProvider.fromConfig(env.config, {
+      logger: env.logger,
+      scheduler: env.scheduler,
+    }));
 
   builder.addProcessor(new ScaffolderEntitiesProcessor());
   const { processingEngine, router } = await builder.build();
@@ -31,6 +32,15 @@ export default async function createPlugin(
       id: 'run_fake_event_type_refresh',
       fn: async () => {
           await fakeEventTypeProvider.run();
+      },
+      frequency: { minutes: 30 },
+      timeout: { minutes: 10 },
+  });
+
+  await env.scheduler.scheduleTask({
+      id: 'run_fake_ping_source_refresh',
+      fn: async () => {
+          await fakePingSourceProvider.run();
       },
       frequency: { minutes: 30 },
       timeout: { minutes: 10 },

@@ -245,3 +245,156 @@ export const EventTypes = {
         "resourceVersion": ""
     }
 };
+
+export const PingSources = {
+    "apiVersion": "v1",
+    "items": [
+        {
+            "apiVersion": "sources.knative.dev/v1",
+            "kind": "PingSource",
+            "metadata": {
+                "annotations": {
+                    "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"sources.knative.dev/v1\",\"kind\":\"PingSource\",\"metadata\":{\"annotations\":{},\"name\":\"test-ping-source\",\"namespace\":\"default\"},\"spec\":{\"contentType\":\"application/json\",\"data\":\"{\\\"message\\\": \\\"Hello world!\\\"}\",\"schedule\":\"*/1 * * * *\",\"sink\":{\"ref\":{\"apiVersion\":\"eventing.knative.dev/v1\",\"kind\":\"Broker\",\"name\":\"default\"}}}}\n",
+                    "sources.knative.dev/creator": "kubernetes-admin",
+                    "sources.knative.dev/lastModifier": "kubernetes-admin"
+                },
+                "creationTimestamp": "2023-09-08T08:29:32Z",
+                "generation": 1,
+                "name": "test-ping-source",
+                "namespace": "default",
+                "resourceVersion": "1837",
+                "uid": "2cc7ebbf-7393-4e83-9a3b-b0d189db3826"
+            },
+            "spec": {
+                "contentType": "application/json",
+                "data": "{\"message\": \"Hello world!\"}",
+                "schedule": "*/1 * * * *",
+                "sink": {
+                    "ref": {
+                        "apiVersion": "eventing.knative.dev/v1",
+                        "kind": "Broker",
+                        "name": "default"
+                    }
+                }
+            },
+            "status": {
+                "ceAttributes": [
+                    {
+                        "source": "/apis/v1/namespaces/default/pingsources/test-ping-source",
+                        "type": "dev.knative.sources.ping"
+                    }
+                ],
+                "conditions": [
+                    {
+                        "lastTransitionTime": "2023-09-08T08:29:40Z",
+                        "status": "True",
+                        "type": "Deployed"
+                    },
+                    {
+                        "lastTransitionTime": "2023-09-08T08:29:40Z",
+                        "status": "True",
+                        "type": "Ready"
+                    },
+                    {
+                        "lastTransitionTime": "2023-09-08T08:29:33Z",
+                        "status": "True",
+                        "type": "SinkProvided"
+                    }
+                ],
+                "observedGeneration": 1,
+                "sinkUri": "http://broker-ingress.knative-eventing.svc.cluster.local/default/default"
+            }
+        }
+    ],
+    "kind": "List",
+    "metadata": {
+        "resourceVersion": ""
+    }
+};
+
+export const ApiServerSources = {
+    "apiVersion": "v1",
+    "items": [
+        {
+            "apiVersion": "sources.knative.dev/v1",
+            "kind": "ApiServerSource",
+            "metadata": {
+                "annotations": {
+                    "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"sources.knative.dev/v1\",\"kind\":\"ApiServerSource\",\"metadata\":{\"annotations\":{},\"name\":\"test-api-server-source\",\"namespace\":\"default\"},\"spec\":{\"mode\":\"Resource\",\"resources\":[{\"apiVersion\":\"v1\",\"kind\":\"Event\"}],\"serviceAccountName\":\"test-api-server-source-sa\",\"sink\":{\"ref\":{\"apiVersion\":\"eventing.knative.dev/v1\",\"kind\":\"Broker\",\"name\":\"default\"}}}}\n",
+                    "sources.knative.dev/creator": "kubernetes-admin",
+                    "sources.knative.dev/lastModifier": "kubernetes-admin"
+                },
+                "creationTimestamp": "2023-09-08T08:29:33Z",
+                "generation": 1,
+                "name": "test-api-server-source",
+                "namespace": "default",
+                "resourceVersion": "2091",
+                "uid": "300784f7-bbd6-4114-a215-305696789078"
+            },
+            "spec": {
+                "mode": "Resource",
+                "resources": [
+                    {
+                        "apiVersion": "v1",
+                        "kind": "Event"
+                    }
+                ],
+                "serviceAccountName": "test-api-server-source-sa",
+                "sink": {
+                    "ref": {
+                        "apiVersion": "eventing.knative.dev/v1",
+                        "kind": "Broker",
+                        "name": "default"
+                    }
+                }
+            },
+            "status": {
+                "ceAttributes": [
+                    {
+                        "source": "https://10.96.0.1:443",
+                        "type": "dev.knative.apiserver.resource.add"
+                    },
+                    {
+                        "source": "https://10.96.0.1:443",
+                        "type": "dev.knative.apiserver.resource.delete"
+                    },
+                    {
+                        "source": "https://10.96.0.1:443",
+                        "type": "dev.knative.apiserver.resource.update"
+                    }
+                ],
+                "conditions": [
+                    {
+                        "lastTransitionTime": "2023-09-08T08:29:45Z",
+                        "status": "True",
+                        "type": "Deployed"
+                    },
+                    {
+                        "lastTransitionTime": "2023-09-08T08:29:45Z",
+                        "status": "True",
+                        "type": "Ready"
+                    },
+                    {
+                        "lastTransitionTime": "2023-09-08T08:29:33Z",
+                        "status": "True",
+                        "type": "SinkProvided"
+                    },
+                    {
+                        "lastTransitionTime": "2023-09-08T08:29:33Z",
+                        "status": "True",
+                        "type": "SufficientPermissions"
+                    }
+                ],
+                "namespaces": [
+                    "default"
+                ],
+                "observedGeneration": 1,
+                "sinkUri": "http://broker-ingress.knative-eventing.svc.cluster.local/default/default"
+            }
+        }
+    ],
+    "kind": "List",
+    "metadata": {
+        "resourceVersion": ""
+    }
+};
