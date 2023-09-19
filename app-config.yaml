@@ -91,6 +91,12 @@ catalog:
       rules:
         - allow: [User, Group]
 
+    # Custom example template
+    - type: file
+      target: ../../examples/custom-template/template.yaml
+      rules:
+        - allow: [ Template ]
+
   providers:
     threeScaleApiEntity:
       dev:
