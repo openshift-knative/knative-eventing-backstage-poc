@@ -286,3 +286,27 @@ Screenshots:
 ---
 ![](README_img08.png)
 
+# Templates
+
+## Setting up GitHub integration
+
+https://backstage.io/docs/getting-started/configuration#setting-up-a-github-integration
+
+Get a token from GitHub, that has `repo` and `workflow` scopes.
+
+Put this in app-config.yaml:
+```yaml
+integrations:
+  github:
+    - host: github.com
+      token: ${BACKSTAGE_GITHUB_TOKEN}
+```
+
+Make sure you have `BACKSTAGE_GITHUB_TOKEN` environment variable set before you start Backstage.
+```shell
+
+export BACKSTAGE_GITHUB_TOKEN="<your token>"
+yarn dev
+```
+
+Now you will be able to generate applications from templates and get them pushed to a repository.
